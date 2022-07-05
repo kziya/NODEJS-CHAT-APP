@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "startDev": "nodemon app.js",
+    "start": "node app.js",
+    "clean": "npx prettier --write \"**/*.js\" \"**/*.json\" "
   },
   "author": "",
   "license": "ISC",
