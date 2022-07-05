@@ -26,11 +26,6 @@ app.use(startupMiddlewares); // An array of middlewares
 
 
 
-app.use((req,res,next) =>{
-    console.log(req.path);
-    return next();;
-})
-
 
 
 // routes

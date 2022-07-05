@@ -2,15 +2,18 @@ const { check } = require('express-validator');
 const User = require('../../models/Users');
 
 module.exports = [
-    check('email').isEmail().withMessage('Invalid email format').custom(value =>{
+    check('email').isEmail().withMessage('Invalid email format').custom(async(value) =>{
+       let error;
         try{
-            const user = User.find({ email : value });
-            if(!user)
-                throw new Error('User already exists!');
+            const user = await User.findOne({ email : value });
+            if(user)
+                error = new Error('User already exists!');
         }catch(e)
         {
-            throw new Error('Something went wrong!');
+            error = new Error('Something went wrong!');
         }
+        if(error) throw error;
+    
         return true;
     }),
     check('password').isLength({ min: 8 }).withMessage('Password must be longer than 7'),

@@ -4,6 +4,6 @@ const userRouter = require('./userRouter');
 
 
 module.exports = (app) =>{
-    app.use('/',homeRouter);
     app.use('/user',userRouter);;
+    app.use('/',homeRouter);
 }
