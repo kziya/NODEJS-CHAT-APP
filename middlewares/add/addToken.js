@@ -7,6 +7,5 @@ module.exports = (req,res,next) =>{
       _token += chars[randNum];
     }
     req.session._token = _token;
-    res.locals._token = _token;
     next();
 }

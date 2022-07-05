@@ -16,8 +16,8 @@ const startupMiddlewares = require('./middlewares/startupMiddlewares');
 app.set('view engine','ejs');
 
 
-
 // middlewares
+app.get('/public/favicon.ico',(req,res) => res.status(200).end());
 app.use('/public',express.static(path.join(__dirname,'public')))
 app.use(express.json());
 app.use(express.urlencoded({ extended : true }));
@@ -25,6 +25,11 @@ app.use(express.urlencoded({ extended : true }));
 app.use(startupMiddlewares); // An array of middlewares
 
 
+
+app.use((req,res,next) =>{
+    console.log(req.path);
+    return next();;
+})
 
 
 
@@ -40,7 +45,7 @@ app.use((req, res) => {
     if (req.accepts("json")) return res.json({ error: "Not found!" });
     return res.type("txt").send("Not found !");
 });
-  
+
 
 
 
