@@ -4,15 +4,12 @@ module.exports = async (req, res, next) => {
   if (req.errors) return next();
 
   try {
-    
     const sendFlag = await mailer.sendMail(req.mailMsg);
-    if (!sendFlag)
-     { req.errors =
+    if (!sendFlag) {
+      req.errors =
         "We have some trouble with sending mails,please try again later!";
       delete req.session.verifyHash;
-     }
-     else 
-      req.session.lastMailTime = Date.now();
+    } else req.session.lastMailTime = Date.now();
   } catch (e) {
     console.log(e);
     req.errors =

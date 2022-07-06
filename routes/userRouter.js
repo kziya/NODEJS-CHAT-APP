@@ -3,8 +3,7 @@ const path = require("path");
 const router = require("express").Router();
 const userController = require("../controllers/userController");
 
-
-const generateVerifyMail = require('../middlewares/mailer/generate/generateVerifyMsg');
+const generateVerifyMail = require("../middlewares/mailer/generate/generateVerifyMsg");
 const sendMail = require("../middlewares/mailer/sendMail");
 
 const checkToken = require("../middlewares/check/checkToken");
@@ -41,7 +40,12 @@ router
   .get(checkVerifyHash, addVerifyUser, userController.verifyMail);
 router
   .route("/send-verify-mail")
-  .get(checkLastMailTime, generateVerifyMail,sendMail, userController.sendVerifyMail);
+  .get(
+    checkLastMailTime,
+    generateVerifyMail,
+    sendMail,
+    userController.sendVerifyMail
+  );
 router.route("/logout").post(checkToken, userController.logoutPOST);
 router.route("/").get(userController.index);
 

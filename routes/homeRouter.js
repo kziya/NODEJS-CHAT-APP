@@ -8,16 +8,15 @@ const addToken = require("../middlewares/add/addToken");
 const checkValidationErrors = require("../middlewares/check/checkValidationErrors");
 const checkToken = require("../middlewares/check/checkToken");
 const checkLastMailTime = require("../middlewares/check/checkLastMailTime");
-const checkVerifyHash = require('../middlewares//check/checkVerifyHash');
+const checkVerifyHash = require("../middlewares//check/checkVerifyHash");
 
 // validations
 const validateSignUp = require("../middlewares/validation/validateSignUp");
 const validateLogin = require("../middlewares/validation/validateLogin");
 const validateForgetPassword = require("../middlewares/validation/validateForgetPassword");
-const validateChangePassword = require('../middlewares/validation/validateChangePassword');
+const validateChangePassword = require("../middlewares/validation/validateChangePassword");
 
-
-const generatePasswordMsg = require('../middlewares/mailer/generate/generatePasswordMsg');
+const generatePasswordMsg = require("../middlewares/mailer/generate/generatePasswordMsg");
 const sendMail = require("../middlewares/mailer/sendMail");
 
 // configs
@@ -44,8 +43,12 @@ router.use((req, res, next) => {
 
 router
   .route("/change-password/:hash")
-  .get(checkVerifyHash,homeController.changePassword)
-  .post(validateChangePassword,checkValidationErrors,homeController.changePasswordPOST);
+  .get(checkVerifyHash, homeController.changePassword)
+  .post(
+    validateChangePassword,
+    checkValidationErrors,
+    homeController.changePasswordPOST
+  );
 router
   .route("/forget-password")
   .get(homeController.forgetPassword)

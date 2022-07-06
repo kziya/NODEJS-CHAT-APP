@@ -3,6 +3,7 @@ const hashPassword = require("../middlewares/hash/hashPassword");
 const addSessions = require("../middlewares/add/addSessions");
 
 // GET
+
 module.exports.index = (req, res) => {
   return res.render("index");
 };
@@ -23,11 +24,11 @@ module.exports.forgetPassword = (req, res) => {
 };
 
 module.exports.changePassword = (req, res) => {
-  if(req.verifyError) return res.render('404');
+  if (req.verifyError) return res.render("404");
 
   res.locals._token = req.session._token;
   res.locals.hash = req.params.hash;
-  res.render('change-password');
+  res.render("change-password");
 };
 
 //POST
@@ -73,7 +74,7 @@ module.exports.signUpPOST = async (req, res) => {
   res.locals.email = req.body.email;
   res.locals._token = req.session._token;
   // check errors
-  
+
   if (!req.validateToken) {
     res.locals.errors = [{ msg: "Something went wrong !" }];
     return res.status(400).render("sign-up");
@@ -119,29 +120,25 @@ module.exports.forgetPasswordPOST = (req, res) => {
   return res.redirect("/login");
 };
 
-module.exports.changePasswordPOST = async(req, res) => {
-  
+module.exports.changePasswordPOST = async (req, res) => {
   res.locals.hash = req.session.verifyHash;
-    if(req.errors)
-    {
-      res.locals.errors = req.errors;
-      return res.render('change-password');
-    }
-    try{
-      const update = await User.updateOne({ email:req.session.email },{$set:{ password : hashPassword(req.body.password) }});
-      if(!update)
-      {
-        console.log('a');
-        res.locals.errors = [{ msg : "Something went wrong !" }];
-        return res.render('change-password');
-      }else
-        return res.redirect('/login');
-
-    }catch(e)
-    {
-      console.log(e);
-      res.locals.errors = [{ msg : "Something went wrong !"}];
-      return res.render('change-password');
-    }
-    
+  if (req.errors) {
+    res.locals.errors = req.errors;
+    return res.render("change-password");
+  }
+  try {
+    const update = await User.updateOne(
+      { email: req.session.email },
+      { $set: { password: hashPassword(req.body.password) } }
+    );
+    if (!update) {
+      console.log("a");
+      res.locals.errors = [{ msg: "Something went wrong !" }];
+      return res.render("change-password");
+    } else return res.redirect("/login");
+  } catch (e) {
+    console.log(e);
+    res.locals.errors = [{ msg: "Something went wrong !" }];
+    return res.render("change-password");
+  }
 };
