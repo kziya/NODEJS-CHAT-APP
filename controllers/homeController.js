@@ -29,12 +29,12 @@ module.exports.loginPOST = async(req,res) =>{
     if(!req.validateToken)
     {
         res.locals.errors = [{ msg : "Something went wrong !" }];
-        return res.status(400).render('sign-up');
+        return res.status(400).render('login');
     }
 
     if(req.validationErrors){
         res.locals.errors = req.validationErrors;
-        return res.status(400).render('sign-up');
+        return res.status(400).render('login');
     }
 
     // get user 
@@ -49,6 +49,7 @@ module.exports.loginPOST = async(req,res) =>{
         
 
         addSessions(req,user.isVerified);
+        if(req.body.remember) req.session.cookie.maxAge *= 365; // 1 year
         return res.redirect('/user');
 
     }catch(e)
