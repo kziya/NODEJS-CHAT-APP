@@ -1,9 +1,7 @@
-const homeRouter = require('./homeRouter');
-const userRouter = require('./userRouter');
+const homeRouter = require("./homeRouter");
+const userRouter = require("./userRouter");
 
-
-
-module.exports = (app) =>{
-    app.use('/user',userRouter);;
-    app.use('/',homeRouter);
-}
+module.exports = (app) => {
+  app.use("/user", userRouter);
+  app.use("/", homeRouter);
+};
