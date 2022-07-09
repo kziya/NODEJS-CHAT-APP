@@ -17,7 +17,7 @@ const roomSchema = mongoose.Schema({
         logedAt: {
           type: Date,
           immutable: true,
-          default: () => Date.now(),
+          default: () => Date.UTC(),
         },
       },
     ],
@@ -35,7 +35,7 @@ const roomSchema = mongoose.Schema({
       sendAt: {
         type: Date,
         required: true,
-        default: () => Date.now(),
+        default: () => Date.UTC(),
       },
     },
   ],

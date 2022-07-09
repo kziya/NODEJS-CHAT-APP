@@ -106,7 +106,64 @@ User
   
       <!-- message header -->
       <div class="col-sm-8 conversation">
-          <h1 class="text-center">Choose user to open chat</h1>
+        <div class="row heading">
+            <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+              <div class="heading-avatar-icon">
+                <img src="/public/images/default-avatar.jpg">
+              </div>
+            </div>
+            <div class="col-sm-8 col-xs-7 heading-name">
+              <a class="heading-name-meta"><%=currentRoom.isGroup ? currentRoom.id : currentRoom.users.find(val => val.email !== email).email  %>
+              </a>
+              <span class="heading-online">Online</span>
+            </div>
+            <div class="col-sm-1 col-xs-1  heading-dot pull-right">
+              <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+          </div>
+    
+        <!-- messages -->
+        <div class="row message" id="conversation">
+            <br>
+            <br>
+            <% 
+            const userLogTime = currentRoom.users.find(user => user.email === email).logedAt;
+            for(const message of currentRoom.messages){
+                if(message.sendAt < userLogTime) continue;
+            %>
+              <div class="row message-body">
+                <div class="col-sm-12 message-main-<%=message.user === email ? 'sender' :'receiver'%>">
+                  <div class="<%=message.user === email ? 'sender' : 'receiver'%>">
+                    <div class="message-text">
+                    <%=message.value%> 
+                    </div>
+                    <span class="message-time pull-right">
+                      <%=message.sendAt.toLocaleDateString()%>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <%}%>
+             
+        </div>
+    
+    
+    
+          <!-- message sender -->
+          <div class="row reply">
+            <div class="col-sm-1 col-xs-1 reply-emojis">
+              <i class="fa fa-smile-o fa-2x"></i>
+            </div>
+            <div class="col-sm-9 col-xs-9 reply-main">
+              <textarea class="form-control" rows="1" id="comment"></textarea>
+            </div>
+            <div class="col-sm-1 col-xs-1 reply-recording">
+              <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-1 col-xs-1 reply-send">
+              <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+            </div>
+          </div>
       </div>
   
   

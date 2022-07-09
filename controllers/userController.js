@@ -64,9 +64,24 @@ module.exports.createRoom = async(req,res) => {
 }
 
 module.exports.chatRoom = async (req,res) => {
- // console.log(req.params.roomId);
+  res.locals._token = req.session._token;
+  res.locals.email = req.session.email;
+
+  // get users and rooms 
+  try{
+    res.locals.currentRoom = await Rooms.findOne({id:req.params.roomId});
+    if(!res.locals.currentRoom) return res.redirect('/user/404'); // if not exists chat
+    res.locals.users = await Users.find({ email : { $ne : req.session.email } }).limit(5);
+    res.locals.rooms = await Rooms.find({ 'users.email' : { $eq : req.session.email}   }); 
+  }catch(e)
+  {
+    console.log(e);
+    return res.redirect('/user/404');
+  }
   
-  return res.end();
+
+  console.log(res.locals.currentRoom.messages);
+  return res.render("chat");
 };
 
 

@@ -13,17 +13,11 @@ module.exports = (server) =>{
     const io = require('socket.io')(server);
     io.use(wrap(expressSession));
     io.on('connection', async(socket) =>{
-        console.log('Connected!');
         // join to rooms
         const rooms = await getRooms(socket);
-        console.log(rooms.length);        
-        //console.dir(rooms);
         socket.join(rooms);
 
     });
-
-
-
 
 
 }
