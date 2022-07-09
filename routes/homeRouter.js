@@ -3,8 +3,10 @@ const path = require("path");
 const router = require("express").Router();
 const homeController = require("../controllers/homeController");
 
+//add
 const addToken = require("../middlewares/add/addToken");
 
+// checks
 const checkValidationErrors = require("../middlewares/check/checkValidationErrors");
 const checkToken = require("../middlewares/check/checkToken");
 const checkLastMailTime = require("../middlewares/check/checkLastMailTime");
@@ -16,8 +18,15 @@ const validateLogin = require("../middlewares/validation/validateLogin");
 const validateForgetPassword = require("../middlewares/validation/validateForgetPassword");
 const validateChangePassword = require("../middlewares/validation/validateChangePassword");
 
+// mail
 const generatePasswordMsg = require("../middlewares/mailer/generate/generatePasswordMsg");
 const sendMail = require("../middlewares/mailer/sendMail");
+
+// check is user loged in
+router.use((req, res, next) => {
+  if (req.session.isAuth) return res.redirect("/user");
+  return next();
+});
 
 // configs
 router.use((req, res, next) => {
@@ -33,12 +42,6 @@ router.use((req, res, next) => {
 
 router.use(addToken);
 
-// check is user loged in
-router.use((req, res, next) => {
-  if (req.session.isAuth) return res.redirect("/user");
-  return next();
-});
-
 // routes
 
 router
@@ -49,6 +52,7 @@ router
     checkValidationErrors,
     homeController.changePasswordPOST
   );
+
 router
   .route("/forget-password")
   .get(homeController.forgetPassword)
@@ -61,6 +65,7 @@ router
     sendMail,
     homeController.forgetPasswordPOST
   );
+
 router
   .route("/login")
   .get(homeController.login)
@@ -70,6 +75,7 @@ router
     checkToken,
     homeController.loginPOST
   );
+
 router
   .route("/sign-up")
   .get(homeController.signUp)
@@ -79,6 +85,6 @@ router
     checkToken,
     homeController.signUpPOST
   );
-router.route("/").get(homeController.index);
 
+router.route("/").get(homeController.index);
 module.exports = router;

@@ -18,6 +18,16 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  rooms: [
+    {
+      id :{ 
+        type :String,
+        required : true
+      }
+    },
+  ],
+
+  contacts: [{ email: String, name: String }],
 
   createdAt: {
     type: Date,
@@ -29,6 +39,7 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: () => Date.now(),
   },
+    
 });
 
 module.exports = mongoose.model("User", userSchema);

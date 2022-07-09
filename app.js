@@ -6,8 +6,9 @@ require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
-
 const app = express();
+const server = require('http').createServer(app);
+const startSocket = require('./socket');
 const start = require("./middlewares/startApplication");
 const startupMiddlewares = require("./middlewares/startupMiddlewares");
 
@@ -16,9 +17,14 @@ const startupMiddlewares = require("./middlewares/startupMiddlewares");
 app.set("view engine", "ejs");
 
 // favicon token bug
-app.get("/public/favicon.ico", (req, res) => res.status(200).end());
 // middlewares
 app.use("/public", express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  if (req.path.startsWith("/public")) return res.status(404).end();
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,4 +43,5 @@ app.use((req, res) => {
 });
 
 // start application
-start(app);
+start(server);
+startSocket(server);

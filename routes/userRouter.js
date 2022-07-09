@@ -3,14 +3,19 @@ const path = require("path");
 const router = require("express").Router();
 const userController = require("../controllers/userController");
 
+// mailer
 const generateVerifyMail = require("../middlewares/mailer/generate/generateVerifyMsg");
 const sendMail = require("../middlewares/mailer/sendMail");
 
+// checks
 const checkToken = require("../middlewares/check/checkToken");
 const checkLastMailTime = require("../middlewares/check/checkLastMailTime");
 const checkVerifyUser = require("../middlewares/check/checkVerifyUser");
 const checkVerifyHash = require("../middlewares/check/checkVerifyHash");
+
+//add
 const addVerifyUser = require("../middlewares/add/addVerifyUser");
+const addToken = require("../middlewares/add/addToken");
 
 // configurations
 router.use((req, res, next) => {
@@ -31,9 +36,14 @@ router.use((req, res, next) => {
 });
 
 // check is user verificated email
-router.use(checkVerifyUser);
+router.use(checkVerifyUser, addToken);
 
 // routes
+
+
+router.route('/chat/:roomId').get(userController.chatRoom);
+
+router.route('/create-room/:userEmail').get(userController.createRoom);
 
 router
   .route("/verify-mail/:hash")

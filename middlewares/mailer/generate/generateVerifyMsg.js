@@ -14,6 +14,6 @@ module.exports = (req, res, next) => {
     subject: "Verify Mail",
     html: `<a href="${fullUrl}">Click here to Verify mail</a>`,
   };
-  req.session.verifyHash = hash;
+  res.locals.hash = hash;
   next();
 };

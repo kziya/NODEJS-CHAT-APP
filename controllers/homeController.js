@@ -54,6 +54,7 @@ module.exports.loginPOST = async (req, res) => {
       email: req.body.email,
       password: hashPassword(req.body.password),
     });
+
     if (!user) {
       res.locals.errors = [{ msg: "Username or password is wrong !" }];
       return res.status(400).render("login");
@@ -114,7 +115,7 @@ module.exports.forgetPasswordPOST = (req, res) => {
   if (req.errors) {
     res.locals._token = req.session._token;
     res.locals.errors = req.errors;
-    return res.render("forget-password");
+    return res.status(400).render("forget-password");
   }
   req.session.email = req.body.email;
   return res.redirect("/login");
@@ -122,22 +123,23 @@ module.exports.forgetPasswordPOST = (req, res) => {
 
 module.exports.changePasswordPOST = async (req, res) => {
   res.locals.hash = req.session.verifyHash;
+
   if (req.errors) {
     res.locals.errors = req.errors;
     return res.render("change-password");
   }
+
   try {
     const update = await User.updateOne(
       { email: req.session.email },
       { $set: { password: hashPassword(req.body.password) } }
     );
+
     if (!update) {
-      console.log("a");
       res.locals.errors = [{ msg: "Something went wrong !" }];
       return res.render("change-password");
     } else return res.redirect("/login");
   } catch (e) {
-    console.log(e);
     res.locals.errors = [{ msg: "Something went wrong !" }];
     return res.render("change-password");
   }
