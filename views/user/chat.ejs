@@ -5,7 +5,11 @@ User
 <link rel="stylesheet" href="/public/css/index.css">
     
 <%- contentFor('body') %>
-
+<script>
+    const roomId = "<%=currentRoom.id%>";
+    const email  = "<%=email%>";
+    const _token = "<%=_token%>";
+</script>
 <div class="container app">
     <div class="row app-one">
       <div class="col-sm-4 side">
@@ -126,25 +130,7 @@ User
         <div class="row message" id="conversation">
             <br>
             <br>
-            <% 
-            const userLogTime = currentRoom.users.find(user => user.email === email).logedAt;
-            for(const message of currentRoom.messages){
-                if(message.sendAt < userLogTime) continue;
-            %>
-              <div class="row message-body">
-                <div class="col-sm-12 message-main-<%=message.user === email ? 'sender' :'receiver'%>">
-                  <div class="<%=message.user === email ? 'sender' : 'receiver'%>">
-                    <div class="message-text">
-                    <%=message.value%> 
-                    </div>
-                    <span class="message-time pull-right">
-                      <%=message.sendAt.toLocaleDateString()%>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <%}%>
-             
+         
         </div>
     
     
@@ -181,3 +167,4 @@ User
 <%- contentFor('jsLinks')  %>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/public/js/socket/connection.js"></script>
+<script src="/public/js/api/getMessages.js" type="module"></script>

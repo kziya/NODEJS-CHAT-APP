@@ -75,12 +75,10 @@ module.exports.chatRoom = async (req,res) => {
     res.locals.rooms = await Rooms.find({ 'users.email' : { $eq : req.session.email}   }); 
   }catch(e)
   {
-    console.log(e);
     return res.redirect('/user/404');
   }
   
 
-  console.log(res.locals.currentRoom.messages);
   return res.render("chat");
 };
 
