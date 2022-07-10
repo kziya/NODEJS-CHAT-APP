@@ -1,5 +1,6 @@
+import formatTime from "./formatTime.js";
 export default (message,messagePlace) => {
-    const messageInner = `   
+  const messageInner = `   
     <div class="col-sm-12 " id="main-message-container">
       <div class="" id="main-message-content">
 
@@ -9,7 +10,6 @@ export default (message,messagePlace) => {
 
     // get sender 
   const messageUser = message.user === email ? 'sender' : 'receiver';
-
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('row','message-body');
   mainContainer.innerHTML = messageInner;
@@ -29,9 +29,18 @@ export default (message,messagePlace) => {
   // create time place
   const messageTime = document.createElement('span');
   messageTime.classList.add('message-time','pull-right');
-  messageTime.innerText = new Date(message.sendAt).toLocaleString();
+  messageTime.innerText = formatTime(new Date(message.sendAt));
   contentPlace.appendChild(messageTime);
+  
+  if(message.error)
+  {
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message');
+    errorMessage.innerText = 'Couldn\'t send message!';
+    contentPlace.prepend(errorMessage);
+  }
     
   // push message to container
   messagePlace.appendChild(mainContainer);
+  messagePlace.scrollTop = messagePlace.scrollHeight;
 }

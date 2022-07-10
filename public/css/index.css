@@ -323,7 +323,7 @@ body {
   background-size: cover;
   overflow-y: auto;
   border: 1px solid #f7f7f7;
-  height: calc(100% - 120px);
+  height: calc(100% - 180px);
 }
 .message-previous {
   margin : 0 !important;
@@ -408,7 +408,7 @@ body {
 /*Reply*/
 
 .reply {
-  height: 60px;
+  height: 120px;
   width: 100%;
   background-color: #f5f1ee;
   padding: 10px 5px 10px 5px !important;
@@ -455,8 +455,8 @@ body {
 
 .reply-main textarea {
   width: 100%;
-  resize: none;
-  overflow: hidden;
+  resize:none;
+  overflow-y:hidden;
   padding: 5px !important;
   outline: none;
   border: none;
@@ -594,4 +594,8 @@ body {
     padding: 5px 2px 5px 0 !important;
     font-size: 1.8em !important;
   }
+}
+
+.error-message{
+  color:red;
 }
