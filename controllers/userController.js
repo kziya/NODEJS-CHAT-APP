@@ -8,19 +8,19 @@ const checkPrivateRoomWithUser = require("../middlewares/check/checkPrivateRoomW
 
 const createPrivateRoom = require("../middlewares/create/createPrivateRoom");
 // GET
+const getUsers = require('../middlewares/get/getUsers');
+const getChats = require("../middlewares/get/getChats");
+// check
+const checkRoomExists = require("../middlewares/check/checkRoomExists");
+
 module.exports.index = async (req, res) => {
   res.locals._token = req.session._token;
   res.locals.email = req.session.email;
 
   // get users and rooms
   try {
-    res.locals.users = await Users.find({
-      email: { $ne: req.session.email },
-    }).limit(5);
-    res.locals.rooms = await Rooms.find(
-      { "users.email": { $eq: req.session.email } },
-      { id: 1, users: 1, isGroup: 1, name: 1 }
-    );
+    res.locals.users = await getUsers(req.session.email);
+    res.locals.rooms = await getChats(req.session.email);
   } catch (e) {
     return res.redirect("/user/404");
   }
@@ -71,8 +71,9 @@ module.exports.chatRoom = async (req, res) => {
 
   // get users and rooms
   try {
-    res.locals.currentRoom = await Rooms.findOne({ id: req.params.roomId });
+    res.locals.currentRoom = await checkRoomExists(req.params.roomId);
     if (!res.locals.currentRoom) return res.redirect("/user/404"); // if not exists chat
+    
     if (
       !res.locals.currentRoom.users.find(
         (elem) => elem.email === req.session.email
@@ -82,14 +83,10 @@ module.exports.chatRoom = async (req, res) => {
       return res.redirect("/user/404");
 
     // get users
-    res.locals.users = await Users.find({
-      email: { $ne: req.session.email },
-    }).limit(5);
+    res.locals.users = await getUsers(req.session.email);
     // get other chats
-    res.locals.rooms = await Rooms.find(
-      { "users.email": { $eq: req.session.email } },
-      { id: 1, users: 1, isGroup: 1, name: 1 }
-    );
+    res.locals.rooms = await getChats(req.session.email);
+
   } catch (e) {
     return res.redirect("/user/404");
   }
@@ -111,7 +108,7 @@ module.exports.logoutPOST = (req, res) => {
 };
 
 module.exports.createGroupPOST = async (req, res) => {
-  if (!req.validateToken) return res.end("Something went wrong !");
+  if (!req.validateToken) return res.redirect('/user/404')
   const users = [req.session.email, ...req.body.users];
   const name = req.body.name;
 
@@ -125,7 +122,7 @@ module.exports.createGroupPOST = async (req, res) => {
   room.name = name;
 
   for (const user of users) {
-    if (!checkUserExists(user)) return res.end("Something went wrong !");
+    if (!checkUserExists(user)) return res.redirect('/user/404')
     room.users.push({ email: user });
   }
 
@@ -138,8 +135,9 @@ module.exports.createGroupPOST = async (req, res) => {
       );
       if (!isUpdated) throw new Error();
     }
-    res.redirect("/user/chat/" + room.id);
+    return res.redirect("/user/chat/" + room.id);
   } catch (e) {
-    res.end("Something went wrong !");
+    return res.redirect('/user/404');
   }
+  
 };
