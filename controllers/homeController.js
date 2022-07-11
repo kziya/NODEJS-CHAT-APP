@@ -10,26 +10,26 @@ module.exports.index = (req, res) => {
 
 module.exports.login = (req, res) => {
   res.locals._token = req.session._token;
-  return res.render("login");
+  return res.render("home/login");
 };
 
 module.exports.signUp = (req, res) => {
   res.locals._token = req.session._token;
-  return res.render("sign-up");
+  return res.render("home/sign-up");
 };
 
 module.exports.forgetPassword = (req, res) => {
   res.locals._token = req.session._token;
-  return res.render("forget-password");
+  return res.render("home/forget-password");
 };
 
 module.exports.changePassword = (req, res) => {
   console.log(req.verifyError);
-  if (req.verifyError) return res.render("404");
+  if (req.verifyError) return res.render("home/404");
 
   res.locals._token = req.session._token;
   res.locals.hash = req.params.hash;
-  res.render("change-password");
+  res.render("home/change-password");
 };
 
 //POST
@@ -41,12 +41,12 @@ module.exports.loginPOST = async (req, res) => {
   // check errors
   if (!req.validateToken) {
     res.locals.errors = [{ msg: "Something went wrong !" }];
-    return res.status(400).render("login");
+    return res.status(400).render("home/login");
   }
 
   if (req.errors) {
     res.locals.errors = req.errors;
-    return res.status(400).render("login");
+    return res.status(400).render("home/login");
   }
 
   // get user
@@ -58,7 +58,7 @@ module.exports.loginPOST = async (req, res) => {
 
     if (!user) {
       res.locals.errors = [{ msg: "Username or password is wrong !" }];
-      return res.status(400).render("login");
+      return res.status(400).render("home/login");
     }
 
     addSessions(req, user.isVerified);
@@ -68,7 +68,7 @@ module.exports.loginPOST = async (req, res) => {
     res.locals.errors = [
       { msg: "Something went wrong, please try again later!" },
     ];
-    return res.status(500).render("login");
+    return res.status(500).render("home/login");
   }
 };
 
@@ -79,12 +79,12 @@ module.exports.signUpPOST = async (req, res) => {
 
   if (!req.validateToken) {
     res.locals.errors = [{ msg: "Something went wrong !" }];
-    return res.status(400).render("sign-up");
+    return res.status(400).render("home/sign-up");
   }
 
   if (req.errors) {
     res.locals.errors = req.errors;
-    return res.status(400).render("sign-up");
+    return res.status(400).render("home/sign-up");
   }
 
   // add User
@@ -98,7 +98,7 @@ module.exports.signUpPOST = async (req, res) => {
       res.locals.errors = [
         { msg: "Something went wrong, please try again later !" },
       ];
-      return res.status(500).render("sign-up");
+      return res.status(500).render("home/sign-up");
     }
 
     addSessions(req, false);
@@ -107,7 +107,7 @@ module.exports.signUpPOST = async (req, res) => {
     res.locals.errors = [
       { msg: "Something went wrong, please try again later !" },
     ];
-    return res.status(500).render("sign-up");
+    return res.status(500).render("home/sign-up");
   }
 };
 
@@ -116,7 +116,7 @@ module.exports.forgetPasswordPOST = (req, res) => {
   if (req.errors) {
     res.locals._token = req.session._token;
     res.locals.errors = req.errors;
-    return res.status(400).render("forget-password");
+    return res.status(400).render("home/forget-password");
   }
   req.session.email = req.body.email;
   return res.redirect("/login");
@@ -127,7 +127,7 @@ module.exports.changePasswordPOST = async (req, res) => {
 
   if (req.errors) {
     res.locals.errors = req.errors;
-    return res.render("change-password");
+    return res.render("home/change-password");
   }
 
   try {
@@ -138,10 +138,10 @@ module.exports.changePasswordPOST = async (req, res) => {
 
     if (!update) {
       res.locals.errors = [{ msg: "Something went wrong !" }];
-      return res.render("change-password");
+      return res.render("home/change-password");
     } else return res.redirect("/login");
   } catch (e) {
     res.locals.errors = [{ msg: "Something went wrong !" }];
-    return res.render("change-password");
+    return res.render("home/change-password");
   }
 };
