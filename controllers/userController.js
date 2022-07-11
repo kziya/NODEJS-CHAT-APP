@@ -26,7 +26,7 @@ module.exports.index = async (req, res) => {
     return res.redirect("/user/404");
   }
 
-  return res.render("index");
+  return res.render("user/index");
 };
 
 module.exports.verifyMail = (req, res) => {
@@ -42,7 +42,7 @@ module.exports.verifyMail = (req, res) => {
 module.exports.sendVerifyMail = (req, res) => {
   res.locals._token = req.session._token;
   if (req.errors) res.locals.errors = req.errors;
-  res.render("send-verify-mail");
+  res.render("user/send-verify-mail");
 };
 
 module.exports.createRoom = async (req, res) => {
@@ -92,13 +92,13 @@ module.exports.chatRoom = async (req, res) => {
     return res.redirect("/user/404");
   }
 
-  return res.render("chat");
+  return res.render("user/chat");
 };
 
 module.exports.createGroup = async (req, res) => {
   res.locals._token = req.session._token;
   res.locals.users = await Users.find({ email: { $ne: req.session.email } });
-  res.render("create-group");
+  res.render("user/create-group");
 };
 
 // POST
