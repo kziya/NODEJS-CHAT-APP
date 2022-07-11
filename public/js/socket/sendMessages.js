@@ -7,7 +7,8 @@ const sendMessage = () => {
     const data = {
         roomId,
         user:email,
-        value : textArea.value
+        value : textArea.value,
+        _token
     }
 
     socket.emit('message',data);

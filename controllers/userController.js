@@ -1,27 +1,27 @@
-const Users = require('../models/Users');
-const Rooms = require('../models/Rooms');
+const Users = require("../models/Users");
+const Rooms = require("../models/Rooms");
 
-const checkUserExists = require('../middlewares/check/checkUserExists');
-const checkPrivateRoomWithUser = require('../middlewares/check/checkPrivateRoomWithUser');
+const checkUserExists = require("../middlewares/check/checkUserExists");
+const checkPrivateRoomWithUser = require("../middlewares/check/checkPrivateRoomWithUser");
 
-
-const createRoom = require('../middlewares/create/createPrivateRoom');
+const createPrivateRoom = require("../middlewares/create/createPrivateRoom");
 // GET
-module.exports.index = async(req, res) => {
+module.exports.index = async (req, res) => {
   res.locals._token = req.session._token;
   res.locals.email = req.session.email;
 
-  // get users and rooms 
-  try{
-    res.locals.users = await Users.find({ email : { $ne : req.session.email } }).limit(5);
-    res.locals.rooms = await Rooms.find({ 'users.email' : { $eq : req.session.email}   }); 
-  }catch(e)
-  {
-    return res.redirect('/user/404');
+  // get users and rooms
+  try {
+    res.locals.users = await Users.find({
+      email: { $ne: req.session.email },
+    }).limit(5);
+    res.locals.rooms = await Rooms.find(
+      { "users.email": { $eq: req.session.email } },
+      { id: 1, users: 1 }
+    );
+  } catch (e) {
+    return res.redirect("/user/404");
   }
-  
-
-
 
   return res.render("index");
 };
@@ -42,46 +42,48 @@ module.exports.sendVerifyMail = (req, res) => {
   res.render("send-verify-mail");
 };
 
-
-module.exports.createRoom = async(req,res) => {
-  try{
-
+module.exports.createRoom = async (req, res) => {
+  try {
     const isUserExists = await checkUserExists(req.params.userEmail);
-    if(!isUserExists || req.params.userEmail === req.session.email) return res.redirect('/user/404');
-    
-    const room = await checkPrivateRoomWithUser(req.params.userEmail,req.session.email);
-    if(room) return res.redirect('/user/chat/' + room.id);
-    
-    const createdRoom = await createRoom(req.session.email,req.params.userEmail);
-    if(!createdRoom) return res.render('404');
-    return res.redirect('/user/chat/' + createdRoom.id)
-  }catch(e)
-  {
-    return res.redirect('/user/404');
+    if (!isUserExists || req.params.userEmail === req.session.email)
+      return res.redirect("/user/404");
+    const room = await checkPrivateRoomWithUser(
+      req.params.userEmail,
+      req.session.email
+    );
+    if (room) return res.redirect("/user/chat/" + room.id);
+    const createdRoom = await createPrivateRoom(
+      req.session.email,
+      req.params.userEmail
+    );
+    if (!createdRoom) return res.render("404");
+    return res.redirect("/user/chat/" + createdRoom.id);
+  } catch (e) {
+    return res.redirect("/user/404");
   }
+};
 
-
-}
-
-module.exports.chatRoom = async (req,res) => {
+module.exports.chatRoom = async (req, res) => {
   res.locals._token = req.session._token;
   res.locals.email = req.session.email;
 
-  // get users and rooms 
-  try{
-    res.locals.currentRoom = await Rooms.findOne({id:req.params.roomId});
-    if(!res.locals.currentRoom) return res.redirect('/user/404'); // if not exists chat
-    res.locals.users = await Users.find({ email : { $ne : req.session.email } }).limit(5);
-    res.locals.rooms = await Rooms.find({ 'users.email' : { $eq : req.session.email}   }); 
-  }catch(e)
-  {
-    return res.redirect('/user/404');
+  // get users and rooms
+  try {
+    res.locals.currentRoom = await Rooms.findOne({ id: req.params.roomId });
+    if (!res.locals.currentRoom) return res.redirect("/user/404"); // if not exists chat
+    res.locals.users = await Users.find({
+      email: { $ne: req.session.email },
+    }).limit(5);
+    res.locals.rooms = await Rooms.find(
+      { "users.email": { $eq: req.session.email } },
+      { id: 1, users: 1 }
+    );
+  } catch (e) {
+    return res.redirect("/user/404");
   }
-  
 
   return res.render("chat");
 };
-
 
 // POST
 module.exports.logoutPOST = (req, res) => {

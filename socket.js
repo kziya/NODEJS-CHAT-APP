@@ -14,10 +14,17 @@ module.exports = (server) =>{
     io.use(wrap(expressSession));
     io.on('connection', async(socket) =>{
         // join to rooms
+        
         const rooms = await getRooms(socket);
         socket.join(rooms);
+        // on message
         socket.on('message',async data =>{
-            console.log(new Date().toUTCString());
+            // check validations
+        
+            if(data._token !== socket.request.session._token) return;   
+            if(data.value.trim() === '') return;
+            
+            // create messages
             const message = {
                 user : socket.request.session.email,
                 sendAt : new Date().toUTCString(),
@@ -25,6 +32,7 @@ module.exports = (server) =>{
             };
 
             try{
+                // add message to the db
                 const updated = await Rooms.updateOne({ id : data.roomId},{$push:{messages:message}});
                 if(!updated.acknowledged)
                     throw new Error('Couldn\'t send to the db!');                
@@ -32,10 +40,10 @@ module.exports = (server) =>{
                 socket.broadcast.to(data.roomId).emit('message',message);
             }catch(e)
             {
-                console.log(e);
                 message.error = 1;
                 socket.emit('message',message);
             }
+
         });
 
     });

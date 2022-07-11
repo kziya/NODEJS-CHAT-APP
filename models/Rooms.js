@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const roomSchema = mongoose.Schema({
   id: {
     type: String,
-    unique:true,
+    unique: true,
     required: true,
   },
   name: String,
@@ -11,13 +11,13 @@ const roomSchema = mongoose.Schema({
     type: [
       {
         email: {
-            type: String,
-            required : true
+          type: String,
+          required: true,
         },
         logedAt: {
           type: Date,
           immutable: true,
-          default: () => Date.UTC(),
+          default: () => new Date().toUTCString(),
         },
       },
     ],
@@ -35,25 +35,19 @@ const roomSchema = mongoose.Schema({
       sendAt: {
         type: Date,
         required: true,
-        default: () => Date.UTC(),
+        default: () => new Date().toUTCString(),
       },
     },
   ],
-  isGroup : {
-    type : Boolean,
-    default:  false,
+  isGroup: {
+    type: Boolean,
+    default: false,
   },
 
   createdAt: {
     type: Date,
-    default: () => Date.now(),
+    default: () => new Date().toUTCString(),
   },
-
 });
-
-
-
-
-
 
 module.exports = mongoose.model("Room", roomSchema);

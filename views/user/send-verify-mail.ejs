@@ -37,9 +37,11 @@
               
   
             <div class="text-center text-lg-start mt-4 pt-2">
-              <a type="submit" class="btn btn-primary btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;" href="/admin/send-verify-mail">Send Again</a>
-              <p class="small fw-bold mt-2 pt-1 mb-0">Wan't to logout ?
+              <form action="/admin/send-verify-mail" method="get">
+                <button type="submit" class="btn btn-primary btn-lg"
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;" >Send Again</button>
+              </form>
+                <p class="small fw-bold mt-2 pt-1 mb-0">Wan't to logout ?
                 <form action="/user/logout"  method="POST" > <input type="hidden" name="_token" value="<%=_token%>"> <button style="border:none;background:transparent;" type="submit" class="link-danger">Logout</button> </form></p>
             </div>
   

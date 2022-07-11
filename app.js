@@ -7,8 +7,8 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const app = express();
-const server = require('http').createServer(app);
-const startSocket = require('./socket');
+const server = require("http").createServer(app);
+const startSocket = require("./socket");
 const start = require("./middlewares/startApplication");
 const startupMiddlewares = require("./middlewares/startupMiddlewares");
 

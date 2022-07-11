@@ -20,10 +20,10 @@ const userSchema = mongoose.Schema({
   },
   rooms: [
     {
-      id :{ 
-        type :String,
-        required : true
-      }
+      id: {
+        type: String,
+        required: true,
+      },
     },
   ],
 
@@ -39,7 +39,6 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: () => Date.now(),
   },
-    
 });
 
 module.exports = mongoose.model("User", userSchema);

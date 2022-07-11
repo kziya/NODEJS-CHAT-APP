@@ -9,12 +9,12 @@ module.exports = async (req, res, next) => {
       req.errors =
         "We have some trouble with sending mails,please try again later!";
       delete req.session.verifyHash;
-    } else{
-    req.session.verifyHash = res.hash; 
-    req.session.lastMailTime = Date.now();
+    } else {
+      req.session.verifyHash = res.locals.hash;
+      req.session.lastMailTime = Date.now();
     }
   } catch (e) {
-   req.errors =
+    req.errors =
       "We have some trouble with sending mails,please try again later!";
   }
 
