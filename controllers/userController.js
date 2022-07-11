@@ -16,10 +16,11 @@ const checkRoomExists = require("../middlewares/check/checkRoomExists");
 module.exports.index = async (req, res) => {
   res.locals._token = req.session._token;
   res.locals.email = req.session.email;
-
   // get users and rooms
   try {
     res.locals.users = await getUsers(req.session.email);
+    console.log(res.locals.users);
+
     res.locals.rooms = await getChats(req.session.email);
   } catch (e) {
     return res.redirect("/user/404");
@@ -139,5 +140,5 @@ module.exports.createGroupPOST = async (req, res) => {
   } catch (e) {
     return res.redirect('/user/404');
   }
-  
+
 };

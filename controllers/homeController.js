@@ -24,6 +24,7 @@ module.exports.forgetPassword = (req, res) => {
 };
 
 module.exports.changePassword = (req, res) => {
+  console.log(req.verifyError);
   if (req.verifyError) return res.render("404");
 
   res.locals._token = req.session._token;

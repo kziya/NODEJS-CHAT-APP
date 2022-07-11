@@ -14,6 +14,6 @@ module.exports = (req, res, next) => {
     subject: "Change password",
     html: `<a href="${fullUrl}">Click here to Change password</a>`,
   };
-  res.hash = hash;
+  res.locals.hash = hash;
   next();
 };
