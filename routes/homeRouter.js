@@ -30,7 +30,6 @@ router.use((req, res, next) => {
 
 // configs
 router.use((req, res, next) => {
-  req.app.set("views", path.join(__dirname, "../views/home"));
   req.app.set(
     "layout",
     path.join(__dirname, "../views/layouts/homeLayout.ejs")
