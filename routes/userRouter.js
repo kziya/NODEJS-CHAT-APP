@@ -19,7 +19,6 @@ const addToken = require("../middlewares/add/addToken");
 
 // configurations
 router.use((req, res, next) => {
-  req.app.set("views", path.join(__dirname, "../views/user"));
   req.app.set(
     "layout",
     path.join(__dirname, "../views/layouts/userLayout.ejs")
@@ -66,7 +65,7 @@ router.route("/").get(userController.index);
 
 router.use((req, res) => {
   res.status(404);
-  if (req.accepts("html")) return res.render("404");
+  if (req.accepts("html")) return res.render("user/404");
   if (req.accepts("json")) return res.json({ error: "Not found!" });
   return res.type("txt").send("Not found !");
 });
