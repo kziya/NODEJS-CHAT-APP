@@ -14,13 +14,16 @@ module.exports = (server) =>{
     io.use(wrap(expressSession));
     io.on('connection', async(socket) =>{
         // join to rooms
+        if(!socket.request.session.isAuth)
+        {
+            return;
+        }
         
         const rooms = await getRooms(socket);
         socket.join(rooms);
         // on message
         socket.on('message',async data =>{
             // check validations
-        
             if(data._token !== socket.request.session._token) return;   
             if(data.value.trim() === '') return;
             
@@ -35,9 +38,10 @@ module.exports = (server) =>{
                 // add message to the db
                 const updated = await Rooms.updateOne({ id : data.roomId},{$push:{messages:message}});
                 if(!updated.acknowledged)
-                    throw new Error('Couldn\'t send to the db!');                
+                    throw new Error('Couldn\'t send to the db!');   
+                  message.roomId = data.roomId;             
                 socket.emit('message',message);
-                socket.broadcast.to(data.roomId).emit('message',message);
+                socket.to(data.roomId).emit('message',message);
             }catch(e)
             {
                 message.error = 1;
@@ -46,7 +50,10 @@ module.exports = (server) =>{
 
         });
 
-    });
+        socket.on('online',user => {
+            socket.broadcast.emit('online',user);
+        });
 
+    });
 
 }

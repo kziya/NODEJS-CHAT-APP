@@ -1,0 +1,96 @@
+<%- contentFor('title') %>
+User
+<%- contentFor('cssLinks') %>
+<link href="/public/css/libraries/bootstrap3.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/public/css/index.css">
+<link rel="stylesheet" href="/public/css/createGroup.css">
+<%- contentFor('body') %>
+<script>
+    const _token = "<%=_token%>";
+</script>
+<style>
+    .sideBar-body:hover {
+    background-color: 0 !important;
+}
+</style>
+<div class="container app">
+    <div class="row app-one">
+      <div class="col-sm-4 side">
+        <div class="side-one">
+          <div class="row heading">
+            <div class="col-sm-3 col-xs-3 heading-avatar">
+              <a class="heading-avatar-icon" href="/user/">
+                <img src="/public/images/default-avatar.jpg">
+              </a>
+            </div>
+            <div class="col-sm-1 col-xs-1  heading-dot  pull-right">
+              <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+            <div class="col-sm-2 col-xs-2 heading-compose  pull-right">
+              <i class="fa fa-comments fa-2x  pull-right" aria-hidden="true"></i>
+            </div>
+          </div>
+  
+          <div class="row searchBox">
+            <div class="col-sm-12 searchBox-inner">
+              <div class="form-group has-feedback">
+                <input id="searchText" type="text" class="form-control" name="searchText" placeholder="Search">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row sideBar">
+            <% for(const user of users){  %> 
+            <div class="row sideBar-body user"  id="<%=user.email%>" >
+              <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                <div class="avatar-icon">
+                  <img src="/public/images/default-avatar.jpg">
+                </div>
+              </div>
+              <div class="col-sm-9 col-xs-9 sideBar-main">
+                <div class="row">
+                  <div class="col-sm-8 col-xs-8 sideBar-name">
+                    <span class="name-meta"><%=user.email%> </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %> 
+          </div>
+
+        </div>
+  
+    
+      </div>
+  
+      <!-- message header -->
+      <div class="col-sm-8 conversation main-content-place">
+        <h1 class="text-center">Create Group</h1>
+        <form action="/user/create-group/" method="post" id="submit-form">
+          <div id="hidden-input-place">
+          </div>
+          <input type="hidden" name="_token" value="<%=_token%>">
+          <input type="text" class="form-control" placeholder="Group name" name="name" id="name-input">
+          <br>
+          <button type="submit" class="btn btn-primary">Create group</button>
+        </form>
+        
+      </div>
+  
+  
+      
+    </div>
+  </div>
+  
+
+<form action="/user/logout" style="margin-left:300px;" method="post">
+    <input type="hidden" name="_token" value="<%=_token%>">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+
+
+<%- contentFor('jsLinks')  %>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/public/js/socket/connection.js" ></script>
+<script src="/public/js/dom/createGroup.js" type="module"></script>

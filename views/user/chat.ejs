@@ -38,8 +38,8 @@ User
           </div>
   
           <div class="row sideBar">
-            <% for(const room of rooms){  %> 
-            <a class="row sideBar-body" href="/user/chat/<%=room.id%>" >
+            <% for(const room of rooms){   %> 
+            <a class="row sideBar-body" href="/user/chat/<%=room.id%>" id="<%=room.id%>" >
               <div class="col-sm-3 col-xs-3 sideBar-avatar">
                 <div class="avatar-icon">
                   <img src="/public/images/default-avatar.jpg">
@@ -48,18 +48,14 @@ User
               <div class="col-sm-9 col-xs-9 sideBar-main">
                 <div class="row">
                   <div class="col-sm-8 col-xs-8 sideBar-name">
-                    <span class="name-meta"><%=room.isGroup ?  room.id : room.users.find(val => val.email !== email).email  %> 
-                  </span>
-                  </div>
-                  <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                    <span class="time-meta pull-right">18:18
-                  </span>
+                    <span class="name-meta"><%=room.isGroup ?  room.name : room.users.find(val => val.email !== email).email  %> </span>
                   </div>
                 </div>
               </div>
             </a>
             <% } %> 
           </div>
+
         </div>
   
         <div class="side-two">
@@ -117,9 +113,8 @@ User
               </div>
             </div>
             <div class="col-sm-8 col-xs-7 heading-name">
-              <a class="heading-name-meta"><%=currentRoom.isGroup ? currentRoom.id : currentRoom.users.find(val => val.email !== email).email  %>
+              <a class="heading-name-meta"><%=currentRoom.isGroup ? currentRoom.name : currentRoom.users.find(val => val.email !== email).email  %>
               </a>
-              <span class="heading-online">Online</span>
             </div>
             <div class="col-sm-1 col-xs-1  heading-dot pull-right">
               <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>

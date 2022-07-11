@@ -178,7 +178,9 @@ body {
   cursor: pointer;
   display: block;
 }
-
+.message-name {
+  font-size:14px;
+}
 .sideBar-body:hover {
   background-color: #f2f2f2;
 }

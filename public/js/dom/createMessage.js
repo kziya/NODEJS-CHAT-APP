@@ -1,4 +1,26 @@
 import formatTime from "./formatTime.js";
+
+const createTimePlace = (contentPlace,message) => {
+  const messageTime = document.createElement("span");
+  messageTime.classList.add("message-time", "pull-right");
+  messageTime.innerText = formatTime(new Date(message.sendAt));
+  contentPlace.appendChild(messageTime);
+}
+const makeErrorPlace = (contentPlace) =>
+{
+  const errorMessage = document.createElement("div");
+  errorMessage.classList.add("error-message");
+  errorMessage.innerText = "Couldn't send message!";
+  contentPlace.prepend(errorMessage);
+}
+
+const createDivPlace = (contentPlace,message,category) =>{
+  const messageName = document.createElement('div');
+  messageName.classList.add(`message-${category}`);
+  messageName.innerText = message[category === 'name' ? 'user' : 'value'];
+  contentPlace.appendChild(messageName);
+}
+
 export default (message, messagePlace) => {
   const messageInner = `   
     <div class="col-sm-12 " id="main-message-container">
@@ -21,23 +43,15 @@ export default (message, messagePlace) => {
 
   contentPlace.classList.add(messageUser);
 
+  createDivPlace(contentPlace,message,'name');
   // create Text place
-  const messageText = document.createElement("div");
-  messageText.classList.add("message-text");
-  messageText.innerText = message.value;
-  contentPlace.appendChild(messageText);
-
+  createDivPlace(contentPlace,message,'text');
   // create time place
-  const messageTime = document.createElement("span");
-  messageTime.classList.add("message-time", "pull-right");
-  messageTime.innerText = formatTime(new Date(message.sendAt));
-  contentPlace.appendChild(messageTime);
+  createTimePlace(contentPlace,message);
+
 
   if (message.error) {
-    const errorMessage = document.createElement("div");
-    errorMessage.classList.add("error-message");
-    errorMessage.innerText = "Couldn't send message!";
-    contentPlace.prepend(errorMessage);
+    makeErrorPlace(contentPlace);
   }
 
   // push message to container

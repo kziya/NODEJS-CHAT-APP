@@ -10,7 +10,6 @@ const sendMessage = () => {
         value : textArea.value,
         _token
     }
-
     socket.emit('message',data);
 }
 
