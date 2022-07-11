@@ -40,10 +40,13 @@ router.use(checkVerifyUser, addToken);
 
 // routes
 
-router.route('/create-group').get(userController.createGroup).post(checkToken,userController.createGroupPOST);
-router.route('/chat/:roomId').get(userController.chatRoom);
+router
+  .route("/create-group")
+  .get(userController.createGroup)
+  .post(checkToken, userController.createGroupPOST);
+router.route("/chat/:roomId").get(userController.chatRoom);
 
-router.route('/create-room/:userEmail').get(userController.createRoom);
+router.route("/create-room/:userEmail").get(userController.createRoom);
 
 router
   .route("/verify-mail/:hash")
