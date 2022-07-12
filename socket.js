@@ -10,9 +10,11 @@ const wrap = (middleware) => (socket, next) =>
 
 module.exports = (server) => {
   const io = require("socket.io")(server,{
+   cors:{ 
     origin : 'example',
     methods:['GET','POST']
-  });
+   }
+   });
   io.use(wrap(expressSession));
   io.on("connection", async (socket) => {
     // check is Auth
